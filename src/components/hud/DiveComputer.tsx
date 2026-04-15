@@ -99,7 +99,7 @@ function SafetyStopPanel() {
   // Don't show if completed and diver moved on
   if (safetyStopCompleted && !safetyStop.active) {
     return (
-      <div className="hud-panel absolute top-[340px] left-1/2 -translate-x-1/2 w-[360px] px-5 py-3 border-2 border-green-500/60">
+      <div className="hud-panel absolute top-[340px] left-1/2 -translate-x-1/2 w-[300px] lg:w-[360px] px-4 py-3 border-2 border-green-500/60">
         <div className="flex items-center justify-center gap-3">
           <span className="text-2xl text-green-400">&#10003;</span>
           <span className="text-lg font-bold text-green-400">SAFETY STOP COMPLETE</span>
@@ -111,7 +111,7 @@ function SafetyStopPanel() {
   // Show skipped warning
   if (safetyStopSkipped) {
     return (
-      <div className="hud-panel absolute top-[340px] left-1/2 -translate-x-1/2 w-[360px] px-5 py-3 border-2 border-red-500 flash">
+      <div className="hud-panel absolute top-[340px] left-1/2 -translate-x-1/2 w-[300px] lg:w-[360px] px-4 py-3 border-2 border-red-500 flash">
         <div className="flex items-center justify-center gap-3">
           <span className="text-2xl text-red-400">&#9888;</span>
           <span className="text-lg font-bold text-red-400">SAFETY STOP SKIPPED</span>
@@ -136,7 +136,7 @@ function SafetyStopPanel() {
   const drifted = !inZone && safetyStop.required && depth <= 8;
 
   return (
-    <div className={`hud-panel absolute top-[340px] left-1/2 -translate-x-1/2 w-[360px] px-5 py-3 border-2 ${
+    <div className={`hud-panel absolute top-[340px] left-1/2 -translate-x-1/2 w-[300px] lg:w-[360px] px-4 py-3 border-2 ${
       safetyStop.active ? 'border-green-500/60' : drifted ? 'border-yellow-400/60' : 'border-[var(--cyan-accent)]/40'
     }`}>
       <div className="text-xs text-[var(--cyan-dim)] opacity-70 mb-1 text-center">SAFETY STOP</div>
@@ -192,7 +192,7 @@ function DecoStopPanel() {
   const ceilingViolation = ceiling > 0 && depth < ceiling;
 
   return (
-    <div className={`hud-panel absolute top-[340px] left-1/2 -translate-x-1/2 w-[400px] px-5 py-4 border-2 ${
+    <div className={`hud-panel absolute top-[340px] left-1/2 -translate-x-1/2 w-[320px] lg:w-[400px] px-4 py-3 border-2 ${
       ceilingViolation ? 'border-red-500 flash' : 'border-red-500/70'
     }`} style={{ background: 'rgba(60, 10, 10, 0.85)' }}>
       <div className="text-xs text-red-400 font-bold mb-2 text-center tracking-wider">
@@ -289,7 +289,7 @@ function TissueLoadingPanel() {
   }
 
   return (
-    <div className="hud-panel absolute bottom-8 left-8 w-[280px] px-4 py-3">
+    <div className="hud-panel absolute bottom-14 left-2 w-[200px] lg:w-[280px] px-3 py-2 hidden lg:block">
       <div className="text-[10px] text-[var(--cyan-dim)] opacity-70 mb-1">
         TISSUE LOADING
       </div>
@@ -448,7 +448,7 @@ export function DiveComputer() {
   return (
     <>
       {/* Left Panel — Depth & NDL/DECO */}
-      <div className="hud-panel absolute top-8 left-8 w-80 p-5">
+      <div className="hud-panel absolute top-2 left-2 w-64 lg:w-80 p-3 lg:p-5 text-xs lg:text-sm">
         {/* Surface/Underwater indicator */}
         {s.depth < 0.5 && (
           <div className="text-xs text-yellow-400 mb-2 text-center py-1 bg-yellow-400/10 rounded">
@@ -542,7 +542,7 @@ export function DiveComputer() {
       </div>
 
       {/* Right Panel — Tank & Time */}
-      <div className="hud-panel absolute top-8 right-8 w-72 p-5">
+      <div className="hud-panel absolute top-2 right-2 w-56 lg:w-72 p-3 lg:p-5 text-xs lg:text-sm">
         <div className="text-xs text-[var(--cyan-dim)] opacity-70 mb-1">TANK PRESSURE</div>
         <div className="flex items-baseline gap-3">
           <div className={`text-4xl font-mono font-bold ${WarningColor(s.tankPressure, 100, 50, true)}`}>
@@ -626,7 +626,7 @@ export function DiveComputer() {
       </div>
 
       {/* Bottom Bar — Ascent Rate Gauge + Safety Stop + Controls */}
-      <div className="hud-panel absolute bottom-8 left-1/2 -translate-x-1/2 w-[700px] px-6 py-3 flex items-center justify-between">
+      <div className="hud-panel absolute bottom-2 left-1/2 -translate-x-1/2 w-[90vw] lg:w-[700px] px-4 py-2 flex items-center justify-between text-xs">
         {/* Ascent Rate Visual Gauge (left side of bottom bar) */}
         <AscentRateGauge />
 

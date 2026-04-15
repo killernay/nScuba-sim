@@ -268,47 +268,64 @@ export function getDecoStops(
   ascentRate = 9,
 ): { stops: Array<{ depth: number; duration: number }>; tissues: number[] } {
   const stops: Array<{ depth: number; duration: number }> = [];
-  let currentTissues = [...tissues];
-  let depth = currentDepthM;
+  let t = [...tissues];
 
-  // Find the first stop (ceiling depth rounded up to nearest 3m)
-  const firstCeiling = getCeilingDepth(currentTissues, gfLow);
-  let firstStopDepth = Math.ceil(firstCeiling / 3) * 3;
-  const firstStopPressure = ambientPressure(firstStopDepth);
+  // 1) Find first stop depth using GF-Low
+  const rawCeiling = getCeilingDepth(t, gfLow);
+  const firstStopDepth = Math.max(3, Math.ceil(rawCeiling / 3) * 3);
+  const firstStopBar = ambientPressure(firstStopDepth);
 
-  // Ascend to each 3m stop
-  while (depth > 0) {
-    const nextStop = depth > 3 ? Math.max(depth - 3, 0) : 0;
-
-    // Calculate current GF for this depth
-    const pAmb = ambientPressure(depth);
-    const gf = gfAtPressure(pAmb, firstStopPressure, gfLow, gfHigh);
-
-    const ceiling = getCeilingDepth(currentTissues, gf);
-
-    if (ceiling <= nextStop) {
-      // Can ascend — simulate ascent time
-      const ascentTime = 3 / ascentRate; // minutes to ascend 3m
-      currentTissues = updateAllTissues(currentTissues, depth - 1.5, fn2, fhe, ascentTime);
-      depth = nextStop;
-    } else {
-      // Must wait at this depth
-      let stopTime = 0;
-      while (getCeilingDepth(currentTissues, gf) > nextStop && stopTime < 999) {
-        currentTissues = updateAllTissues(currentTissues, depth, fn2, fhe, 1);
-        stopTime += 1;
-      }
-      if (stopTime > 0) {
-        stops.push({ depth, duration: stopTime });
-      }
-      // Now ascend
-      const ascentTime = 3 / ascentRate;
-      currentTissues = updateAllTissues(currentTissues, depth - 1.5, fn2, fhe, ascentTime);
-      depth = nextStop;
-    }
-
-    if (depth <= 0) break;
+  // 2) Simulate ascent from current depth to first stop
+  const ascentTime = Math.max(0, (currentDepthM - firstStopDepth)) / ascentRate;
+  if (ascentTime > 0) {
+    const midDepth = (currentDepthM + firstStopDepth) / 2;
+    t = updateAllTissues(t, midDepth, fn2, fhe, ascentTime);
   }
 
-  return { stops, tissues: currentTissues };
+  // 3) Walk stop depths from firstStopDepth down to 3m in 3m steps
+  let depth = firstStopDepth;
+  const MAX_STOP_TIME = 90; // cap per stop
+  const MAX_TOTAL = 300;    // cap total deco
+  let totalDeco = 0;
+
+  while (depth >= 3 && totalDeco < MAX_TOTAL) {
+    const nextDepth = depth - 3;
+
+    // GF at this stop depth (linear interpolation firstStop→surface)
+    const gf = gfAtPressure(ambientPressure(depth), firstStopBar, gfLow, gfHigh);
+
+    // How long must we wait here until ceiling clears next depth?
+    let stopMin = 0;
+    while (stopMin < MAX_STOP_TIME && totalDeco < MAX_TOTAL) {
+      const ceil = getCeilingDepth(t, gf);
+      if (ceil <= nextDepth) break;
+      t = updateAllTissues(t, depth, fn2, fhe, 1);
+      stopMin++;
+      totalDeco++;
+    }
+
+    if (stopMin > 0) {
+      stops.push({ depth, duration: stopMin });
+    }
+
+    // Ascend 3m
+    t = updateAllTissues(t, depth - 1.5, fn2, fhe, 3 / ascentRate);
+    depth = nextDepth;
+  }
+
+  // Final surface GF check at 3m → 0m
+  if (depth <= 3 && getCeilingDepth(t, gfHigh) > 0) {
+    let extra = 0;
+    while (getCeilingDepth(t, gfHigh) > 0 && extra < 30) {
+      t = updateAllTissues(t, 3, fn2, fhe, 1);
+      extra++;
+    }
+    if (extra > 0) {
+      const existing = stops.find(s => s.depth === 3);
+      if (existing) existing.duration += extra;
+      else stops.push({ depth: 3, duration: extra });
+    }
+  }
+
+  return { stops, tissues: t };
 }
