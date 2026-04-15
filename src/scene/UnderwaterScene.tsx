@@ -1,5 +1,6 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, Suspense } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
+import { useGLTF } from '@react-three/drei';
 import { useDiveStore } from '../stores/diveStore';
 import { useSettingsStore } from '../stores/settingsStore';
 import { Diver } from './Diver';
@@ -30,33 +31,50 @@ function SeaBed() {
   );
 }
 
-function WreckPlaceholder() {
+function WreckModels() {
+  const { scene: planeWreck } = useGLTF('/models/japanese_zero_plane_wreck.glb');
+
   return (
-    <group position={[0, -36, -30]}>
-      {/* Hull resting on sand at 40m */}
-      <mesh position={[0, 0, 0]}>
-        <boxGeometry args={[100, 6, 15]} />
-        <meshStandardMaterial color="#5a4030" roughness={0.8} metalness={0.3} />
-      </mesh>
-      {/* Bridge */}
-      <mesh position={[20, 5, 0]}>
-        <boxGeometry args={[15, 6, 12]} />
-        <meshStandardMaterial color="#6a5040" roughness={0.7} metalness={0.4} />
-      </mesh>
-      {/* Mast */}
-      <mesh position={[15, 12, 0]}>
-        <cylinderGeometry args={[0.3, 0.5, 16, 8]} />
-        <meshStandardMaterial color="#7a6050" roughness={0.6} metalness={0.5} />
-      </mesh>
-      {/* Deck rail */}
-      <mesh position={[0, 3.5, 7]}>
-        <boxGeometry args={[80, 0.3, 0.3]} />
-        <meshStandardMaterial color="#8a7060" roughness={0.7} metalness={0.5} />
-      </mesh>
-      <mesh position={[0, 3.5, -7]}>
-        <boxGeometry args={[80, 0.3, 0.3]} />
-        <meshStandardMaterial color="#8a7060" roughness={0.7} metalness={0.5} />
-      </mesh>
+    <group>
+      {/* Japanese Zero plane wreck on seabed */}
+      <primitive object={planeWreck.clone()} position={[15, -38, -20]} scale={[0.3, 0.3, 0.3]} />
+    </group>
+  );
+}
+
+function WhaleShark() {
+  const { scene, animations } = useGLTF('/models/whale_shark.glb');
+  const ref = useRef<THREE.Group>(null);
+  const mixerRef = useRef<THREE.AnimationMixer | null>(null);
+
+  useEffect(() => {
+    if (animations.length > 0) {
+      const mixer = new THREE.AnimationMixer(scene);
+      mixer.clipAction(animations[0]).play();
+      mixerRef.current = mixer;
+    }
+  }, [animations, scene]);
+
+  useFrame((_, delta) => {
+    if (!ref.current) return;
+    mixerRef.current?.update(delta);
+
+    // Swim around the plane wreck (at position [15, -38, -20])
+    const time = Date.now() * 0.00015; // slow graceful swim
+    const radius = 25;
+    const centerX = 15;  // plane wreck X
+    const centerZ = -20; // plane wreck Z
+    ref.current.position.x = centerX + Math.sin(time) * radius;
+    ref.current.position.z = centerZ + Math.cos(time) * radius;
+    ref.current.position.y = -18 + Math.sin(time * 1.5) * 2.5; // 15-20m depth
+
+    // Face direction of movement (tangent to circle)
+    ref.current.rotation.y = -time + Math.PI / 2;
+  });
+
+  return (
+    <group ref={ref}>
+      <primitive object={scene} scale={[0.3, 0.3, 0.3]} />
     </group>
   );
 }
@@ -202,11 +220,16 @@ export function UnderwaterScene() {
       <color attach="background" args={[waterColor.r * 0.2, waterColor.g * 0.25, waterColor.b * 0.5]} />
 
       {/* === THE DIVER === */}
-      <Diver />
+      <Suspense fallback={null}>
+        <Diver />
+      </Suspense>
 
       {/* Environment */}
       <SeaBed />
-      <WreckPlaceholder />
+      <Suspense fallback={null}>
+        <WreckModels />
+        <WhaleShark />
+      </Suspense>
       <DepthMarkers />
 
       {/* Water surface — visible plane at Y=0 */}
@@ -228,3 +251,8 @@ export function UnderwaterScene() {
     </>
   );
 }
+
+// diver uses primitives — no GLB needed
+useGLTF.preload('/models/japanese_zero_plane_wreck.glb');
+// ship wreck removed — too heavy (58MB)
+useGLTF.preload('/models/whale_shark.glb');
