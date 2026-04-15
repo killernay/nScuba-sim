@@ -1,0 +1,41 @@
+{
+  "title": "Pre-Dive Safety Check",
+  "subtitle": "Complete each step with your buddy",
+  "step": "Step {{current}}/{{total}}",
+  "b": {
+    "letter": "B",
+    "title": "BCD",
+    "description": "Check buoyancy compensator",
+    "tasks": ["Inflate/deflate test", "Dump valves working", "Tank band secure", "All buckles fastened"]
+  },
+  "w": {
+    "letter": "W",
+    "title": "Weights",
+    "description": "Check weight system",
+    "tasks": ["Right-hand release check", "Correct amount loaded", "Distribution balanced"]
+  },
+  "r": {
+    "letter": "R",
+    "title": "Releases",
+    "description": "Check all releases and buckles",
+    "tasks": ["Shoulder buckles", "Chest strap", "Cummerbund", "All clips secured"]
+  },
+  "a": {
+    "letter": "A",
+    "title": "Air",
+    "description": "Check air supply",
+    "tasks": ["Valve fully open", "Pressure reads 200+ bar", "Breathe from primary", "Test alternate air source"]
+  },
+  "f": {
+    "letter": "F",
+    "title": "Final Check",
+    "description": "Final equipment check",
+    "tasks": ["Mask defogged and seated", "Computer on and set", "Fins fitted", "Dive brief confirmed"]
+  },
+  "status": {
+    "active": "Active",
+    "completed": "Completed",
+    "pending": "Pending"
+  },
+  "instruction": "Click on the highlighted equipment to complete the check"
+}

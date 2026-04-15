@@ -1,0 +1,11 @@
+{
+  "selectComputer": "เลือกคอมพิวเตอร์ดำน้ำ",
+  "skins": {
+    "default": "แบบเรียนรู้มาตรฐาน",
+    "shearwater": "สไตล์ Shearwater",
+    "garmin": "สไตล์ Garmin",
+    "suunto": "สไตล์ Suunto"
+  },
+  "speed": "ความเร็ว",
+  "endDive": "จบ"
+}

@@ -1,0 +1,11 @@
+{
+  "welcome": "Welcome to nScuba Sim",
+  "selectTank": "Select your tank size. Larger tanks hold more gas but are heavier.",
+  "selectGas": "Choose your breathing gas. Nitrox extends NDL but has a shallower MOD.",
+  "sacExplain": "SAC Rate is how fast you breathe gas at the surface. Lower is better.",
+  "modExplain": "MOD is the deepest you can safely go with this gas mix before O₂ toxicity risk.",
+  "ndlExplain": "NDL is how long you can stay at this depth before mandatory decompression stops are needed.",
+  "ppo2Explain": "PPO₂ shows oxygen partial pressure. Must stay below 1.4 bar for safety.",
+  "bwrafExplain": "BWRAF is the standard buddy check before every dive. Never skip it!",
+  "safetyStopExplain": "A 3-minute pause at 5m depth allows nitrogen to safely off-gas before surfacing."
+}

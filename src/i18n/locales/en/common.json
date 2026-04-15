@@ -1,0 +1,32 @@
+{
+  "appName": "nScuba Sim",
+  "wreckName": "Hardeep",
+  "tagline": "Interactive Dive Training Simulator",
+  "menu": {
+    "dive": "Dive",
+    "diveLog": "Dive Log",
+    "learn": "Learn",
+    "settings": "Settings"
+  },
+  "buttons": {
+    "start": "Start",
+    "next": "Next",
+    "back": "Back",
+    "retry": "Retry",
+    "save": "Save",
+    "cancel": "Cancel",
+    "pause": "Pause",
+    "resume": "Resume",
+    "endDive": "End Dive",
+    "saveLog": "Save Log"
+  },
+  "settings": {
+    "language": "Language",
+    "units": "Units",
+    "metric": "Metric",
+    "imperial": "Imperial",
+    "sound": "Sound",
+    "music": "Music",
+    "computer": "Dive Computer"
+  }
+}

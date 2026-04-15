@@ -1,0 +1,32 @@
+{
+  "appName": "nScuba Sim",
+  "wreckName": "Hardeep",
+  "tagline": "โปรแกรมจำลองการฝึกดำน้ำแบบโต้ตอบ",
+  "menu": {
+    "dive": "ดำน้ำ",
+    "diveLog": "บันทึกการดำน้ำ",
+    "learn": "เรียนรู้",
+    "settings": "ตั้งค่า"
+  },
+  "buttons": {
+    "start": "เริ่ม",
+    "next": "ถัดไป",
+    "back": "ย้อนกลับ",
+    "retry": "ลองใหม่",
+    "save": "บันทึก",
+    "cancel": "ยกเลิก",
+    "pause": "หยุดชั่วคราว",
+    "resume": "ดำเนินต่อ",
+    "endDive": "จบการดำน้ำ",
+    "saveLog": "บันทึกล็อก"
+  },
+  "settings": {
+    "language": "ภาษา",
+    "units": "หน่วยวัด",
+    "metric": "เมตริก",
+    "imperial": "อิมพีเรียล",
+    "sound": "เสียง",
+    "music": "เพลง",
+    "computer": "คอมพิวเตอร์ดำน้ำ"
+  }
+}

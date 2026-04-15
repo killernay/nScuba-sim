@@ -1,0 +1,11 @@
+{
+  "selectComputer": "Select Dive Computer",
+  "skins": {
+    "default": "Default Educational",
+    "shearwater": "Shearwater Style",
+    "garmin": "Garmin Style",
+    "suunto": "Suunto Style"
+  },
+  "speed": "Speed",
+  "endDive": "End"
+}
