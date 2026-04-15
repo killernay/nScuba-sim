@@ -5,6 +5,7 @@ import { WATER_DENSITY_MAP } from '../../types';
 import { useTranslation } from 'react-i18next';
 import { keys } from '../../input';
 import { ZHL16C_N2, ZHL16C_He } from '../../engine/buhlmann';
+import { VirtualJoystick } from './VirtualJoystick';
 
 function WarningColor(value: number, yellowAt: number, redAt: number, invert = false): string {
   if (invert) {
@@ -770,6 +771,9 @@ export function DiveComputer() {
           {' '}({s.netBuoyancy.toFixed(0)}N)
         </div>
       </div>
+
+      {/* Virtual joystick for touch/iPad */}
+      <VirtualJoystick />
 
       {/* Active keys indicator */}
       <KeyIndicator />
