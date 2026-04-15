@@ -18,7 +18,6 @@ const BCD_INFLATE_RATE = 2.0;  // liters/sec of actual volume added at current d
 const BCD_DEFLATE_RATE = 3.0;  // liters/sec released (dump valve faster)
 const DIVER_MASS = 75;         // kg body only
 const WETSUIT_SURFACE_VOL = 10;// 5mm wetsuit neoprene buoyancy at surface (liters)
-const LEAD_WEIGHT_KG = 7;      // lead on weight belt
 const TANK_WEIGHT_KG = 14;     // 12L aluminum tank full
 const TANK_BUOYANCY_L = 11;    // tank displacement volume (liters)
 // Water density read from settings at runtime
@@ -302,6 +301,11 @@ export const useDiveStore = create<DiveState>((set, get) => ({
     // ═══════════════════════════════════════════════════════════
     // DECO STOPS (when NDL exhausted)
     // ═══════════════════════════════════════════════════════════
+    // DIVE TIME (moved up so it's available for deco calc)
+    // ═══════════════════════════════════════════════════════════
+    const newDiveTime = s.diveTime + dtSec;
+
+    // ═══════════════════════════════════════════════════════════
     // Deco stops — expensive, only recalc every 5 sim-seconds
     let newDecoStops = s.decoStops;
     const shouldCalcDeco = newNdl <= 0 && Math.floor(newDiveTime / 5) > Math.floor(s.diveTime / 5);
@@ -378,7 +382,6 @@ export const useDiveStore = create<DiveState>((set, get) => ({
     else if (newDepth > 0.5) newPhase = 'diving';
 
     // Profile log
-    const newDiveTime = s.diveTime + dtSec;
     const shouldLog = Math.floor(newDiveTime / 5) > Math.floor(s.diveTime / 5);
     const newProfileLog = shouldLog
       ? [...s.profileLog, { time: newDiveTime, depth: newDepth, tankPressure: newTankPressure, ndl: newNdl, ppo2: currentPpo2Val }]

@@ -323,7 +323,7 @@ function DiverTab() {
 
 // ─── Environment Tab ────────────────────────────────────────────
 function EnvironmentTab() {
-  const { waterType, setWaterType, weightKg, setWeightKg } = useSettingsStore();
+  const { waterType, setWaterType, setWeightKg } = useSettingsStore();
 
   const handleWaterTypeChange = (type: WaterType) => {
     setWaterType(type);

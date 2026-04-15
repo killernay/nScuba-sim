@@ -132,7 +132,6 @@ function SafetyStopPanel() {
   const secs = Math.floor(safetyStop.remaining % 60);
   const inZone = depth >= 4 && depth <= 6;
   const tooShallow = depth < 4;
-  const tooDeep = depth > 6;
   const drifted = !inZone && safetyStop.required && depth <= 8;
 
   return (
@@ -336,8 +335,6 @@ function TissueLoadingPanel() {
 // ─── Ascent Rate Gauge (vertical) ──────────────────────────────
 function AscentRateGauge() {
   const ascentRate = useDiveStore((s) => s.ascentRate);
-  const { t } = useTranslation('dive');
-
   // Gauge spans -5 (descending) to 20 (ascending fast)
   const minRate = -5;
   const maxRate = 20;

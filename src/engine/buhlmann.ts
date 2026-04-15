@@ -168,9 +168,6 @@ export function getCeilingBar(tissues: number[], gf = 1.0): number {
     const a = (pN2 * ZHL16C_N2[i][1] + pHe * ZHL16C_He[i][1]) / pTotal;
     const b = (pN2 * ZHL16C_N2[i][2] + pHe * ZHL16C_He[i][2]) / pTotal;
 
-    // Tolerated ambient pressure without GF
-    const pTolBuhl = (pTotal - a) * b;
-
     // Apply Gradient Factor: raise the ceiling (more conservative)
     // P_tol_gf = pAmb_current + (pTolBuhl - pAmb_current) / gf
     // Simplified: at the ceiling itself pAmb = pTol, so:
@@ -213,10 +210,6 @@ export function getNdl(
 ): number {
   const pAmb = ambientPressure(depth);
   const pAlvN2 = alveolarPressure(pAmb, fn2);
-  // Assume fhe = 0 for NDL calculation (recreational diving)
-  const fhe = 1.0 - fn2 - (pAmb > 0 ? 0 : 0); // placeholder, typically fn2+fo2=1 for no-He
-  const pAlvHe = 0;
-
   let minTime = 999;
 
   for (let i = 0; i < NUM_COMPARTMENTS; i++) {
@@ -226,9 +219,6 @@ export function getNdl(
     // M-value at surface (1 bar) with GF-High
     const aN2 = ZHL16C_N2[i][1];
     const bN2 = ZHL16C_N2[i][2];
-    const aHe = ZHL16C_He[i][1];
-    const bHe = ZHL16C_He[i][2];
-
     // For N2 compartment: max tolerated N2 loading at surface
     // P_tol = a + 1.0 / b  (M-value at surface = 1 bar)
     // With GF: P_tol_gf = 1.0 + (a + 1.0/b - 1.0) * gfHigh
@@ -288,7 +278,6 @@ export function getDecoStops(
 
   // Ascend to each 3m stop
   while (depth > 0) {
-    const targetDepth = Math.max(firstStopDepth, 0);
     const nextStop = depth > 3 ? Math.max(depth - 3, 0) : 0;
 
     // Calculate current GF for this depth

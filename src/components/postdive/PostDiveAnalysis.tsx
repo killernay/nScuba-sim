@@ -78,7 +78,7 @@ function generateNotes(
   maxAscentRate: number,
   safetyStopDone: boolean,
   maxDepth: number,
-  endNdl: number,
+  _endNdl: number,
   violations: ViolationEntry[],
 ): string[] {
   const notes: string[] = [];

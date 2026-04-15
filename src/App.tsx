@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 export default function App() {
   const phase = useDiveStore((s) => s.phase);
-  const { t } = useTranslation('common');
+  useTranslation('common');
 
   useControls();
   const isInDive = !['setup', 'predive', 'postdive'].includes(phase);

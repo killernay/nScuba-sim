@@ -248,7 +248,7 @@ function DiverBubbles() {
   return (
     <points ref={ref}>
       <bufferGeometry>
-        <bufferAttribute attach="attributes-position" count={count} array={posArr.current!} itemSize={3} />
+        <bufferAttribute attach="attributes-position" count={count} array={posArr.current!} itemSize={3} args={[posArr.current!, 3]} />
       </bufferGeometry>
       <pointsMaterial color="#80d8ff" size={0.1} transparent opacity={0.5} sizeAttenuation depthWrite={false} />
     </points>
