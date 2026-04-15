@@ -1,5 +1,5 @@
 {
-  "buildCommand": "NODE_OPTIONS='--max-old-space-size=1024' vite build",
-  "outputDirectory": "dist",
-  "framework": "vite"
+  "framework": "vite",
+  "buildCommand": "vite build",
+  "outputDirectory": "dist"
 }
